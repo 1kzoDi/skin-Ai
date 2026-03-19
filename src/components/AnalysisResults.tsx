@@ -1,25 +1,21 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  ArrowLeft, 
-  Download, 
-  AlertTriangle, 
-  CheckCircle2, 
+import {
+  ArrowLeft,
+  AlertTriangle,
+  CheckCircle2,
   Info,
   Droplets,
   Sun,
   Wind,
   Heart,
   Stethoscope,
-  Sparkles,
-  Loader2
+  Sparkles
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { SkinAnalysisResult } from "@/types/analysis";
 import { ProductRecommendationsModal } from "./ProductRecommendationsModal";
-import { generatePdfReport } from "@/utils/generatePdfReport";
-import { useToast } from "@/hooks/use-toast";
 
 interface AnalysisResultsProps {
   result: SkinAnalysisResult;
@@ -29,28 +25,6 @@ interface AnalysisResultsProps {
 
 export function AnalysisResults({ result, imageUrl, onBack }: AnalysisResultsProps) {
   const [showProductModal, setShowProductModal] = useState(false);
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const { toast } = useToast();
-
-  const handleDownloadPdf = async () => {
-    setIsGeneratingPdf(true);
-    try {
-      await generatePdfReport(result, imageUrl);
-      toast({
-        title: "PDF создан",
-        description: "Отчёт успешно скачан",
-      });
-    } catch (error) {
-      console.error("PDF generation error:", error);
-      toast({
-        title: "Ошибка",
-        description: "Не удалось создать PDF",
-        variant: "destructive",
-      });
-    } finally {
-      setIsGeneratingPdf(false);
-    }
-  };
 
   const getSeverityClass = (severity: string) => {
     switch (severity) {
@@ -101,38 +75,23 @@ export function AnalysisResults({ result, imageUrl, onBack }: AnalysisResultsPro
             <ArrowLeft className="w-4 h-4" />
             Назад
           </Button>
-          <div className="flex gap-3">
-            <Button 
-              variant="hero" 
-              onClick={() => setShowProductModal(true)} 
-              className="gap-2"
-            >
-              <Sparkles className="w-4 h-4" />
-              Подобрать средства
-            </Button>
-            <Button 
-              variant="outline" 
-              className="gap-2"
-              onClick={handleDownloadPdf}
-              disabled={isGeneratingPdf}
-            >
-              {isGeneratingPdf ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Download className="w-4 h-4" />
-              )}
-              Скачать PDF
-            </Button>
-          </div>
+          <Button
+            variant="hero"
+            onClick={() => setShowProductModal(true)}
+            className="gap-2"
+          >
+            <Sparkles className="w-4 h-4" />
+            Подобрать средства
+          </Button>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Image with markers */}
           <div className="space-y-4">
             <div className="relative rounded-2xl overflow-hidden border border-border bg-secondary/30">
-              <img 
-                src={imageUrl} 
-                alt="Анализируемое фото" 
+              <img
+                src={imageUrl}
+                alt="Анализируемое фото"
                 className="w-full h-auto"
               />
               {/* Problem markers overlay */}
@@ -147,7 +106,7 @@ export function AnalysisResults({ result, imageUrl, onBack }: AnalysisResultsPro
                 </div>
               ))}
             </div>
-            
+
             {/* Legend */}
             <div className="glass-card p-4">
               <h4 className="font-semibold mb-3 flex items-center gap-2">
@@ -261,8 +220,8 @@ export function AnalysisResults({ result, imageUrl, onBack }: AnalysisResultsPro
             <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/50 text-sm text-muted-foreground">
               <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
               <p>
-                Этот анализ носит информационный характер и не заменяет консультацию 
-                квалифицированного дерматолога. При серьёзных проблемах с кожей 
+                Этот анализ носит информационный характер и не заменяет консультацию
+                квалифицированного дерматолога. При серьёзных проблемах с кожей
                 обратитесь к специалисту.
               </p>
             </div>

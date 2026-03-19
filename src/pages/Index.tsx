@@ -7,8 +7,10 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { Footer } from "@/components/Footer";
 import { LoadingAnalysis } from "@/components/LoadingAnalysis";
 import { AnalysisResults } from "@/components/AnalysisResults";
+import { AdBanner } from "@/components/AdBanner";
 import { useToast } from "@/hooks/use-toast";
 import type { SkinAnalysisResult } from "@/types/analysis";
+import { analyzeSkinWithGemini } from "@/services/skinAnalysis";
 
 type AppState = "landing" | "upload" | "analyzing" | "results";
 
@@ -37,51 +39,55 @@ const Index = () => {
     setUploadedImage(null);
   };
 
-  const handleAnalyze = async () => {
-    if (!uploadedImage || !uploadedFile) return;
-
+  const handleCameraCapture = async (imageBase64: string) => {
+    setUploadedImage(imageBase64);
     setAppState("analyzing");
     setAnalysisStep(0);
-
+    const stepInterval = setInterval(() => {
+      setAnalysisStep(prev => {
+        if (prev >= 4) { clearInterval(stepInterval); return prev; }
+        return prev + 1;
+      });
+    }, 1500);
     try {
-      // Simulate step progression for UX
-      const stepInterval = setInterval(() => {
-        setAnalysisStep(prev => {
-          if (prev >= 4) {
-            clearInterval(stepInterval);
-            return prev;
-          }
-          return prev + 1;
-        });
-      }, 1500);
-
-      // Call the AI analysis edge function
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analyze-skin`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({
-            image: uploadedImage,
-          }),
-        }
-      );
-
+      const result = await analyzeSkinWithGemini(imageBase64);
       clearInterval(stepInterval);
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Ошибка анализа");
-      }
-
-      const result = await response.json();
       setAnalysisResult(result);
       setAnalysisStep(5);
       setAppState("results");
     } catch (error) {
+      clearInterval(stepInterval);
+      console.error("Camera analysis error:", error);
+      toast({
+        title: "Ошибка анализа",
+        description: error instanceof Error ? error.message : "Попробуйте ещё раз позже",
+        variant: "destructive",
+      });
+      setAppState("upload");
+    }
+  };
+
+  const handleAnalyze = async () => {
+    if (!uploadedImage) return;
+
+    setAppState("analyzing");
+    setAnalysisStep(0);
+
+    const stepInterval = setInterval(() => {
+      setAnalysisStep(prev => {
+        if (prev >= 4) { clearInterval(stepInterval); return prev; }
+        return prev + 1;
+      });
+    }, 1500);
+
+    try {
+      const result = await analyzeSkinWithGemini(uploadedImage);
+      clearInterval(stepInterval);
+      setAnalysisResult(result);
+      setAnalysisStep(5);
+      setAppState("results");
+    } catch (error) {
+      clearInterval(stepInterval);
       console.error("Analysis error:", error);
       toast({
         title: "Ошибка анализа",
@@ -107,7 +113,11 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
+      {/* Рекламные баннеры по бокам */}
+      <AdBanner position="left" />
+      <AdBanner position="right" />
+
       <main className="pt-16">
         {appState === "landing" && (
           <>
@@ -126,6 +136,7 @@ const Index = () => {
               isAnalyzing={false}
               uploadedImage={uploadedImage}
               onClearImage={handleClearImage}
+              onCameraCapture={handleCameraCapture}
             />
             <Features />
           </>
