@@ -7,7 +7,6 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { Footer } from "@/components/Footer";
 import { LoadingAnalysis } from "@/components/LoadingAnalysis";
 import { AnalysisResults } from "@/components/AnalysisResults";
-import { AdBanner } from "@/components/AdBanner";
 import { useToast } from "@/hooks/use-toast";
 import type { SkinAnalysisResult } from "@/types/analysis";
 import { analyzeSkinWithGemini } from "@/services/skinAnalysis";
@@ -113,10 +112,6 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-
-      {/* Рекламные баннеры по бокам */}
-      <AdBanner position="left" />
-      <AdBanner position="right" />
 
       <main className="pt-16">
         {appState === "landing" && (

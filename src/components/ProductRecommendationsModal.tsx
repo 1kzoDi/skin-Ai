@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Sparkles, ShoppingBag } from "lucide-react";
+import { Sparkles, ShoppingBag, ExternalLink } from "lucide-react";
 import type { SkinType, SkinCondition } from "@/types/analysis";
 
 interface Product {
@@ -17,6 +17,7 @@ interface Product {
   description: string;
   price: number; // цена в тенге
   imageUrl: string;
+  buyUrl: string; // ссылка на покупку
 }
 
 interface ProductRecommendation {
@@ -30,6 +31,9 @@ interface ProductRecommendationsModalProps {
   skinType: SkinType;
   conditions: SkinCondition[];
 }
+
+const kaspiSearch = (query: string) =>
+  `https://kaspi.kz/shop/search/?text=${encodeURIComponent(query)}`;
 
 const getProductRecommendations = (
   skinType: SkinType,
@@ -48,23 +52,26 @@ const getProductRecommendations = (
       { 
         brand: "CeraVe", 
         name: "Foaming Facial Cleanser", 
-        description: "Пенка с церамидами и ниацинамидом", 
-        price: 4500,
-        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop"
+        description: "Пенка с церамидами и ниацинамидом (236 мл)", 
+        price: 6300,
+        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("CeraVe Foaming Facial Cleanser")
       },
       { 
         brand: "La Roche-Posay", 
         name: "Effaclar Gel", 
-        description: "Гель для жирной кожи с цинком", 
-        price: 7200,
-        imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop"
+        description: "Очищающий гель для жирной кожи с цинком (200 мл)", 
+        price: 7400,
+        imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("La Roche-Posay Effaclar очищающий гель")
       },
       { 
         brand: "Paula's Choice", 
         name: "CLEAR Pore Normalizing Cleanser", 
-        description: "Мягкое очищение для проблемной кожи", 
-        price: 9800,
-        imageUrl: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=200&h=200&fit=crop"
+        description: "Мягкое очищение для проблемной кожи (177 мл)", 
+        price: 11200,
+        imageUrl: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("Paula's Choice CLEAR Pore Normalizing Cleanser")
       }
     );
   } else if (skinType === "dry" || skinType === "sensitive") {
@@ -72,23 +79,26 @@ const getProductRecommendations = (
       { 
         brand: "CeraVe", 
         name: "Hydrating Cleanser", 
-        description: "Увлажняющее очищение с гиалуроновой кислотой", 
-        price: 4200,
-        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop"
+        description: "Увлажняющее очищение с гиалуроновой кислотой (236 мл)", 
+        price: 5800,
+        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("CeraVe Hydrating Cleanser")
       },
       { 
         brand: "La Roche-Posay", 
         name: "Toleriane Caring Wash", 
-        description: "Нежное очищение для чувствительной кожи", 
-        price: 6800,
-        imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop"
+        description: "Нежное очищение для чувствительной кожи (200 мл)", 
+        price: 7900,
+        imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("La Roche-Posay Toleriane Caring Wash")
       },
       { 
         brand: "Avène", 
         name: "Xeracalm A.D Cleansing Oil", 
-        description: "Липидовосполняющее масло для очищения", 
-        price: 8500,
-        imageUrl: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200&h=200&fit=crop"
+        description: "Липидовосполняющее масло для очищения (400 мл)", 
+        price: 10500,
+        imageUrl: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("Avene Xeracalm масло для очищения")
       }
     );
   } else {
@@ -96,16 +106,18 @@ const getProductRecommendations = (
       { 
         brand: "CeraVe", 
         name: "SA Smoothing Cleanser", 
-        description: "Очищение с салициловой кислотой", 
-        price: 4800,
-        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop"
+        description: "Очищение с салициловой кислотой (236 мл)", 
+        price: 6100,
+        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("CeraVe SA Smoothing Cleanser")
       },
       { 
         brand: "Clinique", 
         name: "Liquid Facial Soap Mild", 
-        description: "Мягкое мыло для лица", 
-        price: 8200,
-        imageUrl: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=200&h=200&fit=crop"
+        description: "Мягкое мыло для лица (200 мл)", 
+        price: 10900,
+        imageUrl: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("Clinique Liquid Facial Soap Mild")
       }
     );
   }
@@ -125,30 +137,34 @@ const getProductRecommendations = (
         { 
           brand: "The Ordinary", 
           name: "Niacinamide 10% + Zinc 1%", 
-          description: "Сыворотка для сужения пор и контроля себума", 
-          price: 2800,
-          imageUrl: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200&h=200&fit=crop"
+          description: "Сыворотка для сужения пор и контроля себума (30 мл)", 
+          price: 7500,
+          imageUrl: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200&h=200&fit=crop",
+          buyUrl: kaspiSearch("The Ordinary Niacinamide 10% + Zinc 1%")
         },
         { 
           brand: "Differin", 
           name: "Adapalene Gel 0.1%", 
-          description: "Ретиноид для лечения акне", 
-          price: 5500,
-          imageUrl: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=200&h=200&fit=crop"
+          description: "Ретиноид для лечения акне (15 г)", 
+          price: 6200,
+          imageUrl: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=200&h=200&fit=crop",
+          buyUrl: kaspiSearch("Differin Adapalene гель")
         },
         { 
           brand: "Paula's Choice", 
           name: "2% BHA Liquid Exfoliant", 
-          description: "Культовый эксфолиант с салициловой кислотой", 
-          price: 12500,
-          imageUrl: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=200&h=200&fit=crop"
+          description: "Культовый эксфолиант с салициловой кислотой (30 мл)", 
+          price: 11100,
+          imageUrl: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=200&h=200&fit=crop",
+          buyUrl: kaspiSearch("Paula's Choice 2% BHA Liquid Exfoliant")
         },
         { 
           brand: "La Roche-Posay", 
           name: "Effaclar Duo+", 
-          description: "Корректирующий крем против несовершенств", 
-          price: 8900,
-          imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop"
+          description: "Корректирующий крем против несовершенств (40 мл)", 
+          price: 11800,
+          imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop",
+          buyUrl: kaspiSearch("La Roche-Posay Effaclar Duo+")
         }
       ]
     });
@@ -168,30 +184,34 @@ const getProductRecommendations = (
         { 
           brand: "The Ordinary", 
           name: "Alpha Arbutin 2% + HA", 
-          description: "Сыворотка для осветления пигментации", 
-          price: 3200,
-          imageUrl: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200&h=200&fit=crop"
+          description: "Сыворотка для осветления пигментации (30 мл)", 
+          price: 8200,
+          imageUrl: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=200&h=200&fit=crop",
+          buyUrl: kaspiSearch("The Ordinary Alpha Arbutin 2%")
         },
         { 
           brand: "Paula's Choice", 
           name: "C15 Super Booster", 
-          description: "Концентрат витамина C 15%", 
-          price: 18500,
-          imageUrl: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=200&h=200&fit=crop"
+          description: "Концентрат витамина C 15% (20 мл)", 
+          price: 21500,
+          imageUrl: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=200&h=200&fit=crop",
+          buyUrl: kaspiSearch("Paula's Choice C15 Super Booster")
         },
         { 
           brand: "La Roche-Posay", 
           name: "Mela-D Pigment Control", 
-          description: "Сыворотка против пигментных пятен", 
-          price: 14200,
-          imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop"
+          description: "Сыворотка против пигментных пятен (30 мл)", 
+          price: 17500,
+          imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop",
+          buyUrl: kaspiSearch("La Roche-Posay Mela-D Pigment Control")
         },
         { 
           brand: "Skinceuticals", 
           name: "C E Ferulic", 
-          description: "Премиальная сыворотка с витамином C", 
-          price: 65000,
-          imageUrl: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200&h=200&fit=crop"
+          description: "Премиальная сыворотка с витамином C (30 мл)", 
+          price: 72000,
+          imageUrl: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200&h=200&fit=crop",
+          buyUrl: kaspiSearch("Skinceuticals C E Ferulic")
         }
       ]
     });
@@ -208,23 +228,26 @@ const getProductRecommendations = (
       { 
         brand: "Neutrogena", 
         name: "Hydro Boost Water Gel", 
-        description: "Гель с гиалуроновой кислотой", 
-        price: 4500,
-        imageUrl: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=200&h=200&fit=crop"
+        description: "Гель с гиалуроновой кислотой (50 мл)", 
+        price: 6800,
+        imageUrl: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("Neutrogena Hydro Boost Water Gel")
       },
       { 
         brand: "CeraVe", 
         name: "PM Facial Moisturizing Lotion", 
-        description: "Лёгкий увлажняющий лосьон с ниацинамидом", 
-        price: 5200,
-        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop"
+        description: "Лёгкий увлажняющий лосьон с ниацинамидом (52 мл)", 
+        price: 7200,
+        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("CeraVe PM Facial Moisturizing Lotion")
       },
       { 
         brand: "La Roche-Posay", 
         name: "Effaclar Mat", 
-        description: "Матирующий увлажняющий крем", 
-        price: 8500,
-        imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop"
+        description: "Матирующий увлажняющий крем (40 мл)", 
+        price: 10900,
+        imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("La Roche-Posay Effaclar Mat")
       }
     );
   } else if (skinType === "dry" || skinType === "sensitive") {
@@ -232,23 +255,26 @@ const getProductRecommendations = (
       { 
         brand: "CeraVe", 
         name: "Moisturizing Cream", 
-        description: "Насыщенный крем с церамидами", 
-        price: 4800,
-        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop"
+        description: "Насыщенный крем с церамидами (340 г)", 
+        price: 7800,
+        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("CeraVe Moisturizing Cream")
       },
       { 
         brand: "La Roche-Posay", 
         name: "Cicaplast Baume B5+", 
-        description: "Восстанавливающий бальзам", 
-        price: 7500,
-        imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop"
+        description: "Восстанавливающий бальзам (40 мл)", 
+        price: 8900,
+        imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("La Roche-Posay Cicaplast Baume B5")
       },
       { 
         brand: "Avène", 
         name: "XeraCalm A.D Lipid-Replenishing Cream", 
-        description: "Крем для очень сухой кожи", 
-        price: 9200,
-        imageUrl: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200&h=200&fit=crop"
+        description: "Крем для очень сухой кожи (200 мл)", 
+        price: 12800,
+        imageUrl: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("Avene XeraCalm крем")
       }
     );
   } else {
@@ -256,16 +282,18 @@ const getProductRecommendations = (
       { 
         brand: "CeraVe", 
         name: "Daily Moisturizing Lotion", 
-        description: "Ежедневный увлажняющий лосьон", 
-        price: 4500,
-        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop"
+        description: "Ежедневный увлажняющий лосьон (236 мл)", 
+        price: 6500,
+        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("CeraVe Daily Moisturizing Lotion")
       },
       { 
         brand: "Clinique", 
         name: "Dramatically Different Moisturizing Gel", 
-        description: "Культовый увлажняющий гель", 
-        price: 12500,
-        imageUrl: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=200&h=200&fit=crop"
+        description: "Культовый увлажняющий гель (125 мл)", 
+        price: 15900,
+        imageUrl: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("Clinique Dramatically Different Moisturizing Gel")
       }
     );
   }
@@ -278,30 +306,34 @@ const getProductRecommendations = (
       { 
         brand: "CeraVe", 
         name: "Hydrating Sunscreen SPF50", 
-        description: "Увлажняющий солнцезащитный крем", 
-        price: 5800,
-        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop"
+        description: "Увлажняющий солнцезащитный крем (50 мл)", 
+        price: 7900,
+        imageUrl: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("CeraVe солнцезащитный крем SPF50")
       },
       { 
         brand: "Bioderma", 
-        name: "Photoderm MAX Aquafluide", 
-        description: "Аквафлюид для чувствительной кожи", 
-        price: 8200,
-        imageUrl: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200&h=200&fit=crop"
+        name: "Photoderm MAX Aquafluide SPF50+", 
+        description: "Аквафлюид для чувствительной кожи (40 мл)", 
+        price: 10200,
+        imageUrl: "https://images.unsplash.com/photo-1617897903246-719242758050?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("Bioderma Photoderm MAX Aquafluide")
       },
       { 
         brand: "La Roche-Posay", 
-        name: "Anthelios UVMune 400", 
-        description: "Флюид SPF50+ с новейшими фильтрами", 
-        price: 11500,
-        imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop"
+        name: "Anthelios UVMune 400 SPF50+", 
+        description: "Флюид с новейшими фильтрами (50 мл)", 
+        price: 13500,
+        imageUrl: "https://images.unsplash.com/photo-1570194065650-d99fb4ee8f04?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("La Roche-Posay Anthelios UVMune 400")
       },
       { 
         brand: "Isdin", 
-        name: "Fotoprotector Fusion Water", 
-        description: "Лёгкая текстура, не оставляет белых следов", 
-        price: 14800,
-        imageUrl: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=200&h=200&fit=crop"
+        name: "Fotoprotector Fusion Water SPF50", 
+        description: "Лёгкая текстура, не оставляет белых следов (50 мл)", 
+        price: 16800,
+        imageUrl: "https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=200&h=200&fit=crop",
+        buyUrl: kaspiSearch("Isdin Fotoprotector Fusion Water")
       }
     ]
   });
@@ -319,7 +351,7 @@ const formatPrice = (price: number) => {
 };
 
 const getPriceClass = (price: number) => {
-  if (price < 6000) return "bg-success/10 text-success border-success/30";
+  if (price < 8000) return "bg-success/10 text-success border-success/30";
   if (price < 15000) return "bg-primary/10 text-primary border-primary/30";
   return "bg-accent/10 text-accent border-accent/30";
 };
@@ -347,7 +379,7 @@ export function ProductRecommendationsModal({
             Рекомендованные средства
           </DialogTitle>
           <DialogDescription>
-            Подборка косметических средств на основе вашего типа кожи и выявленных проблем
+            Подборка косметических средств на основе вашего типа кожи и выявленных проблем. Цены актуальны для Казахстана.
           </DialogDescription>
         </DialogHeader>
 
@@ -381,9 +413,20 @@ export function ProductRecommendationsModal({
                           </Badge>
                         </div>
                         <p className="font-medium">{product.name}</p>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {product.description}
-                        </p>
+                        <div className="flex items-center justify-between mt-1 gap-2">
+                          <p className="text-sm text-muted-foreground">
+                            {product.description}
+                          </p>
+                          <a
+                            href={product.buyUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-xs font-medium transition-colors"
+                          >
+                            Купить
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -395,8 +438,9 @@ export function ProductRecommendationsModal({
 
         <div className="mt-6 pt-4 border-t border-border">
           <p className="text-xs text-muted-foreground mb-4">
-            * Рекомендации носят информационный характер. Перед использованием новых средств 
-            рекомендуем провести тест на небольшом участке кожи. Цены указаны ориентировочно.
+            * Цены актуальны на апрель 2026 г. для Казахстана и могут отличаться в зависимости от продавца. 
+            Рекомендации носят информационный характер. Перед использованием новых средств 
+            рекомендуем провести тест на небольшом участке кожи.
           </p>
           <Button onClick={onClose} className="w-full">
             Понятно, спасибо!
